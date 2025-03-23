@@ -1,16 +1,11 @@
 package com.epam.task.spring_two.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-@Data
 @Entity
-@NoArgsConstructor
+@Data
 @RequiredArgsConstructor
 public class Book {
     @Id
@@ -18,8 +13,10 @@ public class Book {
     private Long id;
     private String title;
     private String author;
+    @Column(name = "year_of_publish")
     private int yearOfPublish;
     private double price;
     private String classification;
+    @Column(name = "is_available")
     private boolean isAvailable;
 }
