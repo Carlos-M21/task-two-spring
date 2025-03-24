@@ -1,11 +1,13 @@
 package com.epam.task.spring_two.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class Book {
     @Id
