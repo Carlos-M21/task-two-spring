@@ -1,5 +1,6 @@
 package com.epam.task.spring_two.service;
 
+import com.epam.task.spring_two.dto.BookDTO;
 import com.epam.task.spring_two.model.Book;
 import com.epam.task.spring_two.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +25,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public Book createBook(BookDTO book) {
+        Book bookDomain = Book.toDomain(book);
+        return bookRepository.save(bookDomain);
     }
 
     @Override
-    public Book updateBook(Long id, Book book) {
+    public Book updateBook(Long id, BookDTO book) {
+        Book bookDomain = Book.toDomain(book);
         if (!bookRepository.existsById(id)) {
             throw new RuntimeException("Book not found with id: " + id);
         }
-        book.setId(id);
-        return bookRepository.save(book);
+        bookDomain.setId(id);
+        return bookRepository.save(bookDomain);
     }
 
     @Override

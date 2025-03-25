@@ -16,11 +16,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         return http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/books").permitAll()
-                        .requestMatchers("/api/books/**").authenticated()
+                        .requestMatchers("/api/books/all").permitAll()
+                        .requestMatchers("/api/books/get**").authenticated()
+                        .requestMatchers("/api/books/updateBookById/**").hasAuthority("SCOPE_update:book")
+                        .requestMatchers("/api/books/deleteBookById/**").hasAuthority("SCOPE_update:book")
+                        .requestMatchers("/api/books/create").hasAuthority("SCOPE_update:book")
+                        .anyRequest().authenticated()
                 )
                 .cors(withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -34,4 +37,5 @@ public class SecurityConfig {
         String jwkSetUri = "https://dev-w1csf1wc8blmmzi2.us.auth0.com/.well-known/jwks.json";
         return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
+
 }

@@ -1,10 +1,10 @@
 package com.epam.task.spring_two.controller;
 
+import com.epam.task.spring_two.dto.BookDTO;
 import com.epam.task.spring_two.model.Book;
 import com.epam.task.spring_two.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,32 +15,32 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('SCOPE_readbook')")
+    @GetMapping(value = "/all")
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_readbook')")
+    @GetMapping(value = "/getById/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
         return ResponseEntity.ok(bookService.getBookById(id));
     }
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_updatebook')")
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    @GetMapping(value = "/getByTitle/{title}")
+    public ResponseEntity<Book> getBookByTitle(@PathVariable String title) {
+        return ResponseEntity.ok(bookService.findByTitle(title));
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<Book> createBook(@RequestBody BookDTO book) {
         return ResponseEntity.ok(bookService.createBook(book));
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_updatebook')")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
+    @PutMapping(value = "/updateBookById/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody BookDTO book) {
         return ResponseEntity.ok(bookService.updateBook(id, book));
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_updatebook')")
+    @DeleteMapping(value = "/deleteBookById/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
