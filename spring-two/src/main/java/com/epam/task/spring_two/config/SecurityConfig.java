@@ -18,7 +18,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/books/all").permitAll()
+                       .requestMatchers("/api/books/all").permitAll()
+                        .requestMatchers("/api/books/unsafe").permitAll()
+                        .requestMatchers("/api/books/logic-error").permitAll()
                         .requestMatchers("/api/books/get**").authenticated()
                         .requestMatchers("/api/books/updateBookById/**").hasAuthority("SCOPE_update:book")
                         .requestMatchers("/api/books/deleteBookById/**").hasAuthority("SCOPE_update:book")
