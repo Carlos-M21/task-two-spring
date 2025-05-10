@@ -7,6 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
 import java.util.List;
 
 @RestController
@@ -14,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
+    private final DataSource dataSource;
+
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<Book>> getAllBooks() {
@@ -44,6 +52,26 @@ public class BookController {
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/unsafe")
+    public String unsafeMethod(String input) {
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement()) {
+            // Intentional SQL Injection flaw
+            statement.executeQuery("SELECT * FROM book WHERE title = '" + input + "'");
+            return "Data Retrieved";
+        } catch (SQLException e) {
+            return "Error in SQL Handling";
+        }
+    }
+
+    @GetMapping("/logic-error")
+    public int faultyLogic() {
+        int a = 10;
+        int b = 0;
+        // Intentional Division by Zero error
+        return a / b;
     }
 
 }
